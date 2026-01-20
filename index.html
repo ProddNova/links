@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>@2L2F_urbex | Urban Exploration Italia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* RESET E VARIABILI */
+        :root {
+            --main-red: #dc2626;
+            --dark-red: #b91c1c;
+            --light-red: #ef4444;
+            --black: #000000;
+            --dark-gray: #111111;
+            --medium-gray: #1a1a1a;
+            --light-gray: #2a2a2a;
+            --text-white: #ffffff;
+            --text-light: #f0f0f0;
+            --text-dim: #aaaaaa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--black);
+            color: var(--text-white);
+            min-height: 100vh;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* EFFETTI SFONDO */
+        .background-effects {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(220, 38, 38, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+        }
+
+        /* CONTAINER PRINCIPALE */
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: rgba(22, 22, 22, 0.95);
+            border-radius: 24px;
+            padding: 28px 24px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 0 0 1px rgba(220, 38, 38, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--main-red), var(--light-red), var(--main-red));
+            border-radius: 24px 24px 0 0;
+        }
+
+        /* SEZIONE PROFILO */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-pic-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid var(--main-red);
+            object-fit: cover;
+            box-shadow: 
+                0 0 30px rgba(220, 38, 38, 0.4),
+                inset 0 0 20px rgba(0, 0, 0, 0.3);
+            animation: pulse-red 3s infinite ease-in-out;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(220, 38, 38, 0.7);
+            }
+        }
+
+        .username {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-white);
+            margin-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .username span {
+            color: var(--main-red);
+        }
+
+        .tagline {
+            font-size: 0.95rem;
+            color: var(--text-dim);
+            font-weight: 300;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            position: relative;
+            padding-bottom: 12px;
+        }
+
+        .tagline::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--main-red), transparent);
+        }
+
+        .counter-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(220, 38, 38, 0.1);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            margin-top: 12px;
+        }
+
+        .counter {
+            font-weight: 700;
+            color: var(--main-red);
+            font-size: 1rem;
+        }
+
+        .counter-label {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+        }
+
+        /* DIVIDER */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(220, 38, 38, 0.3), 
+                rgba(220, 38, 38, 0.6), 
+                rgba(220, 38, 38, 0.3), 
+                transparent);
+            margin: 24px 0;
+            border-radius: 1px;
+        }
+
+        /* LINKS */
+        .links-container {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 10px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 18px 20px;
+            background: rgba(30, 30, 30, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            text-decoration: none;
+            color: var(--text-white);
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            -webkit-touch-callout: none;
+        }
+
+        .social-link::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(220, 38, 38, 0.1), 
+                transparent);
+            transition: left 0.6s ease;
+        }
+
+        .social-link:hover::after,
+        .social-link:active::after {
+            left: 100%;
+        }
+
+        .social-link:hover,
+        .social-link:active {
+            background: rgba(40, 40, 40, 0.9);
+            border-color: var(--main-red);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.2);
+        }
+
+        .social-link i {
+            font-size: 22px;
+            color: var(--main-red);
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .link-content {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .link-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-white);
+            margin-bottom: 4px;
+        }
+
+        .link-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* BADGE COMING SOON FIXED - TUTTO INTERNO AL BOTTONE */
+        .coming-soon-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .coming-soon-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: linear-gradient(135deg, var(--main-red), var(--dark-red));
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 3px 10px rgba(220, 38, 38, 0.4);
+            z-index: 10;
+            white-space: nowrap;
+            line-height: 1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* APP SCAMBI SPECIAL STYLE */
+        .app-link {
+            background: linear-gradient(135deg, 
+                rgba(35, 20, 20, 0.9), 
+                rgba(45, 25, 25, 0.9));
+            border-color: rgba(220, 38, 38, 0.3);
+            padding: 18px 20px 18px 20px;
+        }
+
+        /* FOOTER */
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-logo {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--main-red);
+            margin-bottom: 8px;
+            letter-spacing: 1.5px;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            line-height: 1.4;
+            margin-bottom: 6px;
+        }
+
+        .footer-link {
+            color: var(--light-red);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--dark-gray);
+            border-radius: 20px;
+            padding: 30px 24px;
+            max-width: 400px;
+            width: 100%;
+            border: 2px solid var(--main-red);
+            box-shadow: 0 20px 50px rgba(220, 38, 38, 0.3);
+            animation: slideUp 0.4s ease;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-white);
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--main-red);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-white);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-description {
+            color: var(--text-dim);
+            line-height: 1.6;
+            margin-bottom: 24px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .highlight {
+            color: var(--main-red);
+            font-weight: 600;
+        }
+
+        .modal-features {
+            background: rgba(30, 30, 30, 0.5);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(220, 38, 38, 0.1);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .feature-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature-item i {
+            color: var(--main-red);
+            flex-shrink: 0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 12px;
+            flex-direction: column;
+        }
+
+        .modal-button {
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .modal-button.primary {
+            background: var(--main-red);
+            color: white;
+        }
+
+        .modal-button.primary:hover {
+            background: var(--dark-red);
+            transform: translateY(-2px);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* MEDIA QUERIES PER MOBILE */
+        @media (max-width: 380px) {
+            .container {
+                padding: 24px 20px;
+                border-radius: 20px;
+            }
+            
+            .profile-pic {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .username {
+                font-size: 1.7rem;
+            }
+            
+            .tagline {
+                font-size: 0.85rem;
+                letter-spacing: 2px;
+            }
+            
+            .social-link {
+                padding: 16px;
+                gap: 14px;
+            }
+            
+            .link-title {
+                font-size: 1rem;
+            }
+            
+            .coming-soon-badge {
+                font-size: 0.65rem;
+                padding: 3px 6px;
+                top: 8px;
+                right: 8px;
+            }
+            
+            .modal-content {
+                padding: 24px 20px;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .profile-pic {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .social-link {
+                padding: 14px 16px;
+            }
+            
+            .coming-soon-badge {
+                top: 6px;
+                right: 6px;
+            }
+        }
+
+        /* PREVENT TEXT SELECTION ON MOBILE */
+        .no-select {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* IMPROVE TOUCH TARGETS */
+        @media (max-width: 768px) {
+            .social-link,
+            .modal-button {
+                min-height: 56px;
+            }
+        }
+
+        /* HIDE SCROLLBAR FOR MODAL */
+        .modal-content::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .modal-content::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .modal-content::-webkit-scrollbar-thumb {
+            background: var(--main-red);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- SFONDO -->
+    <div class="background-effects">
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- CONTAINER PRINCIPALE -->
+    <div class="container">
+        <!-- PROFILO -->
+        <div class="profile-section">
+            <div class="profile-pic-wrapper">
+                <img src="https://yt3.googleusercontent.com/N4WaWTevD_K5buOS7rOYGHmwowNgBRTA0r6fF5vnylvLEUefL8G4ofnlh9LZ8th2TOrnt0gd-A=s160-c-k-c0x00ffffff-no-rj" 
+                     alt="2L2F_urbex" 
+                     class="profile-pic">
+            </div>
+            
+            <h1 class="username">@<span>2L2F</span>_urbex</h1>
+            <p class="tagline">2LOST2FIND</p>
+            
+            <div class="counter-container">
+                <i class="fas fa-users"></i>
+                <span class="counter">8K+</span>
+                <span class="counter-label">Urban Explorers</span>
+            </div>
+        </div>
+
+        <!-- DIVIDER -->
+        <div class="divider"></div>
+
+        <!-- LINK SOCIAL -->
+        <div class="links-container">
+            <!-- APP SCAMBI (PRIMO LINK) -->
+            <div class="coming-soon-container">
+                <div class="social-link app-link" id="app-scambi-link">
+                    <i class="fas fa-exchange-alt"></i>
+                    <div class="link-content">
+                        <div class="link-title">App Scambi</div>
+                        <div class="link-subtitle">Scambia location e consigli con altri explorer</div>
+                    </div>
+                    <div class="coming-soon-badge">Coming Soon</div>
+                </div>
+            </div>
+
+            <!-- YOUTUBE -->
+            <a href="https://youtube.com/@2l2f_urbex?si=U6JXIomo4y97xjQt" 
+               class="social-link" 
+               target="_blank" 
+               rel="noopener">
+                <i class="fab fa-youtube"></i>
+                <div class="link-content">
+                    <div class="link-title">YouTube</div>
+                    <div class="link-subtitle">Esplorazioni in video • Documentari urbani</div>
+                </div>
+            </a>
+
+            <!-- INSTAGRAM -->
+            <a href="https://www.instagram.com/2l2f.urbex?igsh=MTMwOW55MXhrMnl5Zw%3D%3D&utm_source=qr" 
+               class="social-link" 
+               target="_blank" 
+               rel="noopener">
+                <i class="fab fa-instagram"></i>
+                <div class="link-content">
+                    <div class="link-title">Instagram</div>
+                    <div class="link-subtitle">Foto esclusive • Dietro le quinte • Stories</div>
+                </div>
+            </a>
+
+            <!-- TIKTOK -->
+            <a href="https://www.tiktok.com/@lost.trace.unit?_r=1&_t=ZN-93EAjzD3274" 
+               class="social-link" 
+               target="_blank" 
+               rel="noopener">
+                <i class="fab fa-tiktok"></i>
+                <div class="link-content">
+                    <div class="link-title">TikTok</div>
+                    <div class="link-subtitle">Short videos • Reels • Esplorazioni rapide</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <div class="footer-logo">2L2F_URBEX</div>
+            <p class="footer-text">Exploring the forgotten • Documenting the abandoned</p>
+            <p class="footer-text">© 2024 <a href="https://youtube.com/@2l2f_urbex" class="footer-link" target="_blank">2L2F_urbex</a></p>
+            <p class="footer-text" style="font-size: 0.8rem; opacity: 0.7;">Ricorda: Non lasciare tracce, prendi solo foto</p>
+        </div>
+    </div>
+
+    <!-- MODAL APP SCAMBI -->
+    <div class="modal-overlay" id="app-scambi-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="close-modal">&times;</button>
+            
+            <div class="modal-icon">
+                <i class="fas fa-exchange-alt"></i>
+            </div>
+            
+            <h2 class="modal-title">App Scambi</h2>
+            
+            <p class="modal-description">
+                La <span class="highlight">prima app dedicata</span> alla community di Urban Exploration in Italia.
+                Un luogo sicuro per scambiare <span class="highlight">location, consigli e informazioni</span> su posti abbandonati.
+            </p>
+            
+            <div class="modal-features">
+                <div class="feature-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Scambio location sicuro e verificato</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Accesso riservato alla community urbex</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt"></i>
+                    <span>Disponibile su Web e App nativa</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span><span class="highlight">Entro Febbraio 2024:</span> versione chiusa per i primi (whitelist)</span>
+                </div>
+            </div>
+            
+            <p class="modal-description" style="font-size: 0.9rem;">
+                L'app sarà <span class="highlight">completamente gratuita</span> e disponibile inizialmente in versione web, 
+                seguita dall'app nativa per iOS e Android. La whitelist di Febbraio sarà aperta ai membri più attivi della community.
+            </p>
+            
+            <div class="modal-buttons">
+                <button class="modal-button primary" id="close-modal-2">
+                    Ho capito
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Riferimenti DOM
+        const appScambiLink = document.getElementById('app-scambi-link');
+        const modal = document.getElementById('app-scambi-modal');
+        const closeButtons = document.querySelectorAll('#close-modal, #close-modal-2');
+
+        // Apri modal quando si clicca su App Scambi
+        appScambiLink.addEventListener('click', () => {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+
+        // Chiudi modal
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            });
+        });
+
+        // Chiudi modal cliccando sullo sfondo
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Prevenire zoom su input per iOS
+        document.addEventListener('touchstart', function(e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(e) {
+            const now = Date.now();
+            if (now - lastTouchEnd <= 300) {
+                e.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Animazione counter
+        document.addEventListener('DOMContentLoaded', () => {
+            const counter = document.querySelector('.counter');
+            let count = 0;
+            const target = 8000;
+            const increment = target / 50;
+            
+            const updateCounter = () => {
+                if (count < target) {
+                    count += increment;
+                    counter.textContent = Math.floor(count).toLocaleString() + '+';
+                    setTimeout(updateCounter, 30);
+                } else {
+                    counter.textContent = '8K+';
+                }
+            };
+            
+            // Avvia animazione quando visibile
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        updateCounter();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            observer.observe(counter);
+        });
+
+        // Migliora performance su mobile
+        document.addEventListener('touchmove', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+                return;
+            }
+            e.preventDefault();
+        }, { passive: false });
+    </script>
+</body>
+</html>
