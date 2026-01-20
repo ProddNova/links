@@ -2,21 +2,18 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>@2L2F_urbex | Urban Exploration</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* RESET E VARIABILI */
+        /* RESET COMPLETO */
         :root {
             --main-red: #dc2626;
             --dark-red: #b91c1c;
             --light-red: #ef4444;
             --black: #000000;
             --dark-gray: #111111;
-            --medium-gray: #1a1a1a;
-            --light-gray: #2a2a2a;
             --text-white: #ffffff;
-            --text-light: #f0f0f0;
             --text-dim: #aaaaaa;
         }
 
@@ -27,82 +24,57 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        html {
+        html, body {
+            width: 100%;
             height: 100%;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background: var(--black);
             color: var(--text-white);
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* FIX PER IOS CHROME - ALTEZZA REALE */
-        @supports (-webkit-touch-callout: none) {
-            body {
-                min-height: -webkit-fill-available;
-            }
-        }
-
-        /* EFFETTI SFONDO */
-        .background-effects {
+            justify-content: center;
+            padding: 0;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            pointer-events: none;
+            right: 0;
+            bottom: 0;
         }
 
-        .grid-overlay {
-            position: absolute;
+        /* WRAPPER PRINCIPALE - SCROLLABILE SE NECESSARIO */
+        .scroll-wrapper {
             width: 100%;
             height: 100%;
-            background-image: 
-                linear-gradient(rgba(220, 38, 38, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(220, 38, 38, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            opacity: 0.3;
-        }
-
-        /* WRAPPER PER SCROLL NATURALE */
-        .page-wrapper {
-            width: 100%;
-            max-width: 420px;
-            padding: 20px 16px 40px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            justify-content: center;
             align-items: center;
+            padding: 10px 15px 30px;
+            padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px));
         }
 
-        /* CONTAINER PRINCIPALE - ORA SENZA FIXED HEIGHT */
+        /* CONTAINER PRINCIPALE - DIMENSIONI MOLTO PIÙ PICCOLE */
         .container {
             width: 100%;
+            max-width: 380px;
             background: rgba(22, 22, 22, 0.95);
-            border-radius: 18px;
-            padding: 22px 18px;
+            border-radius: 16px;
+            padding: 18px 16px;
             box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.4),
-                0 0 0 1px rgba(220, 38, 38, 0.1),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+                0 4px 20px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(220, 38, 38, 0.1);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             position: relative;
-            margin: 10px 0;
+            margin: auto 0;
             border: 1px solid rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
         }
 
         .container::before {
@@ -111,50 +83,36 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
+            height: 3px;
             background: linear-gradient(90deg, var(--main-red), var(--light-red), var(--main-red));
-            border-radius: 18px 18px 0 0;
+            border-radius: 16px 16px 0 0;
         }
 
-        /* SEZIONE PROFILO */
+        /* PROFILO - DIMENSIONI RIDOTTE */
         .profile-section {
             text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .profile-pic-wrapper {
-            position: relative;
-            display: inline-block;
             margin-bottom: 16px;
         }
 
+        .profile-pic-wrapper {
+            margin-bottom: 12px;
+        }
+
         .profile-pic {
-            width: 90px;
-            height: 90px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             border: 3px solid var(--main-red);
             object-fit: cover;
-            box-shadow: 
-                0 0 20px rgba(220, 38, 38, 0.4),
-                inset 0 0 15px rgba(0, 0, 0, 0.3);
-            animation: pulse-red 3s infinite ease-in-out;
-        }
-
-        @keyframes pulse-red {
-            0%, 100% {
-                box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
-            }
-            50% {
-                box-shadow: 0 0 30px rgba(220, 38, 38, 0.6);
-            }
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
         }
 
         .username {
-            font-size: 1.7rem;
+            font-size: 1.5rem;
             font-weight: 800;
             color: var(--text-white);
-            margin-bottom: 6px;
-            letter-spacing: 1px;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
         }
 
         .username span {
@@ -162,46 +120,33 @@
         }
 
         .tagline {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-dim);
             font-weight: 300;
-            letter-spacing: 2.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            margin-bottom: 14px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .tagline::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--main-red), transparent);
+            margin-bottom: 10px;
         }
 
         .counter-container {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
+            gap: 5px;
             background: rgba(220, 38, 38, 0.1);
-            padding: 6px 12px;
-            border-radius: 18px;
+            padding: 5px 10px;
+            border-radius: 15px;
             border: 1px solid rgba(220, 38, 38, 0.2);
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .counter {
             font-weight: 700;
             color: var(--main-red);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
         }
 
         .counter-label {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-dim);
         }
 
@@ -212,190 +157,135 @@
                 transparent, 
                 rgba(220, 38, 38, 0.3), 
                 rgba(220, 38, 38, 0.6), 
-                rgba(220, 38, 38, 0.3), 
                 transparent);
-            margin: 18px 0;
-            border-radius: 1px;
+            margin: 14px 0;
         }
 
-        /* LINKS */
+        /* LINK - DIMENSIONI MINIME */
         .links-container {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 8px;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
         .social-link {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 14px;
+            gap: 10px;
+            padding: 12px;
             background: rgba(30, 30, 30, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
+            border-radius: 10px;
             text-decoration: none;
             color: var(--text-white);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            transition: all 0.2s ease;
             position: relative;
             overflow: hidden;
-            -webkit-touch-callout: none;
-        }
-
-        .social-link::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(220, 38, 38, 0.1), 
-                transparent);
-            transition: left 0.5s ease;
-        }
-
-        .social-link:active::after {
-            left: 100%;
-        }
-
-        .social-link:active {
-            background: rgba(40, 40, 40, 0.9);
-            border-color: var(--main-red);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
         }
 
         .social-link i {
-            font-size: 18px;
+            font-size: 16px;
             color: var(--main-red);
-            width: 20px;
+            width: 18px;
             text-align: center;
-            flex-shrink: 0;
         }
 
         .link-content {
-            flex-grow: 1;
-            min-width: 0;
+            flex: 1;
         }
 
         .link-title {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--text-white);
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .link-subtitle {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-dim);
-            font-weight: 400;
             line-height: 1.2;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
             overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
         }
 
-        /* BADGE COMING SOON - POSIZIONE FISSA */
-        .coming-soon-container {
-            position: relative;
-        }
-
+        /* BADGE FIXATO - POSIZIONE ASSOLUTA MA NEL BOTTONE */
         .coming-soon-badge {
             position: absolute;
             top: 8px;
             right: 8px;
             background: linear-gradient(135deg, var(--main-red), var(--dark-red));
             color: white;
-            font-size: 0.65rem;
-            padding: 3px 6px;
-            border-radius: 5px;
+            font-size: 0.6rem;
+            padding: 2px 5px;
+            border-radius: 4px;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.3px;
-            box-shadow: 0 2px 8px rgba(220, 38, 38, 0.4);
-            z-index: 10;
-            white-space: nowrap;
+            box-shadow: 0 2px 5px rgba(220, 38, 38, 0.4);
             line-height: 1;
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        /* APP SCAMBI SPECIAL STYLE */
         .app-link {
             background: linear-gradient(135deg, 
                 rgba(35, 20, 20, 0.9), 
                 rgba(45, 25, 25, 0.9));
             border-color: rgba(220, 38, 38, 0.3);
-            padding-right: 65px; /* Spazio per badge */
         }
 
-        /* FOOTER */
+        /* FOOTER - RIDOTTO */
         .footer {
             text-align: center;
-            margin-top: 20px;
-            padding-top: 16px;
+            margin-top: 16px;
+            padding-top: 12px;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .footer-logo {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 800;
             color: var(--main-red);
-            margin-bottom: 6px;
-            letter-spacing: 1.2px;
+            margin-bottom: 4px;
         }
 
         .footer-text {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-dim);
-            line-height: 1.3;
-            margin-bottom: 3px;
+            line-height: 1.2;
+            margin-bottom: 2px;
         }
 
-        .footer-link {
-            color: var(--light-red);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .footer-link:active {
-            text-decoration: underline;
-        }
-
-        /* MODAL STYLES - FIX PER IOS */
+        /* MODAL - COMPATTO */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            height: -webkit-fill-available;
             background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
-            padding: 16px;
-            padding-bottom: calc(16px + env(safe-area-inset-bottom));
-            animation: fadeIn 0.3s ease;
+            padding: 15px;
         }
 
         .modal-content {
             background: var(--dark-gray);
-            border-radius: 16px;
-            padding: 22px 18px;
-            max-width: 380px;
+            border-radius: 14px;
+            padding: 20px 16px;
             width: 100%;
+            max-width: 340px;
             border: 2px solid var(--main-red);
-            box-shadow: 0 15px 40px rgba(220, 38, 38, 0.3);
-            animation: slideUp 0.3s ease;
+            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
             position: relative;
-            max-height: 80vh;
+            max-height: 85vh;
             overflow-y: auto;
         }
 
@@ -406,288 +296,170 @@
             background: none;
             border: none;
             color: var(--text-dim);
-            font-size: 1.3rem;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
+            font-size: 1.2rem;
+            width: 28px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            transition: all 0.2s;
-        }
-
-        .modal-close:active {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-white);
         }
 
         .modal-icon {
-            font-size: 2.2rem;
+            font-size: 2rem;
             color: var(--main-red);
             text-align: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .modal-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--text-white);
             text-align: center;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .modal-description {
             color: var(--text-dim);
             line-height: 1.4;
-            margin-bottom: 18px;
+            margin-bottom: 15px;
             text-align: center;
-            font-size: 0.85rem;
-        }
-
-        .highlight {
-            color: var(--main-red);
-            font-weight: 600;
+            font-size: 0.8rem;
         }
 
         .modal-features {
             background: rgba(30, 30, 30, 0.5);
-            border-radius: 10px;
-            padding: 12px;
-            margin-bottom: 18px;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
             border: 1px solid rgba(220, 38, 38, 0.1);
         }
 
         .feature-item {
             display: flex;
             align-items: flex-start;
-            gap: 8px;
-            margin-bottom: 8px;
+            gap: 6px;
+            margin-bottom: 6px;
             color: var(--text-light);
-            font-size: 0.8rem;
-        }
-
-        .feature-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .feature-item i {
-            color: var(--main-red);
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-
-        .modal-buttons {
-            display: flex;
-            gap: 10px;
-            flex-direction: column;
+            font-size: 0.75rem;
         }
 
         .modal-button {
-            padding: 11px;
-            border-radius: 9px;
+            padding: 10px;
+            border-radius: 8px;
             font-weight: 600;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s;
             border: none;
             text-align: center;
-            text-decoration: none;
-        }
-
-        .modal-button.primary {
             background: var(--main-red);
             color: white;
+            width: 100%;
         }
 
-        .modal-button.primary:active {
-            background: var(--dark-red);
-            transform: translateY(-1px);
-        }
-
-        /* ANIMATIONS */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* MEDIA QUERIES PER MOBILE - OTTIMIZZATE PER IOS CHROME */
+        /* MEDIA QUERIES ULTRA-COMPATTE */
         @media (max-width: 380px) {
-            .page-wrapper {
-                padding: 15px 12px 35px;
-            }
-            
             .container {
-                padding: 20px 16px;
-                border-radius: 16px;
+                padding: 16px 14px;
+                max-width: 340px;
             }
             
             .profile-pic {
-                width: 80px;
-                height: 80px;
+                width: 70px;
+                height: 70px;
             }
             
             .username {
-                font-size: 1.5rem;
-            }
-            
-            .tagline {
-                font-size: 0.8rem;
-                letter-spacing: 2px;
+                font-size: 1.3rem;
             }
             
             .social-link {
-                padding: 12px 10px;
-                gap: 10px;
-            }
-            
-            .app-link {
-                padding-right: 60px;
+                padding: 10px;
             }
             
             .link-title {
-                font-size: 0.9rem;
-            }
-            
-            .link-subtitle {
-                font-size: 0.7rem;
-                -webkit-line-clamp: 2;
-            }
-            
-            .coming-soon-badge {
-                font-size: 0.6rem;
-                padding: 2px 5px;
-                top: 6px;
-                right: 6px;
-            }
-            
-            .modal-content {
-                padding: 20px 16px;
+                font-size: 0.85rem;
             }
         }
 
-        @media (max-height: 650px) {
-            .page-wrapper {
-                padding: 10px 12px 30px;
-                justify-content: flex-start;
+        @media (max-height: 600px) {
+            .scroll-wrapper {
+                padding-top: 5px;
+                padding-bottom: 15px;
             }
             
             .container {
+                padding: 14px 12px;
                 margin: 5px 0;
             }
             
-            .profile-pic {
-                width: 75px;
-                height: 75px;
-            }
-            
-            .social-link {
-                padding: 11px 10px;
-            }
-            
-            .link-subtitle {
-                -webkit-line-clamp: 1;
-            }
-            
-            .footer {
-                margin-top: 15px;
-                padding-top: 12px;
-            }
-        }
-
-        /* SCREEN MOLTO CORTI */
-        @media (max-height: 550px) {
-            .page-wrapper {
-                padding: 5px 10px 25px;
-            }
-            
             .profile-section {
-                margin-bottom: 15px;
+                margin-bottom: 12px;
             }
             
-            .profile-pic-wrapper {
-                margin-bottom: 10px;
-            }
-            
-            .divider {
-                margin: 12px 0;
+            .profile-pic {
+                width: 65px;
+                height: 65px;
             }
             
             .links-container {
-                gap: 8px;
+                gap: 6px;
             }
-        }
-
-        /* FIX SPECIFICO PER IOS CHROME */
-        @supports (-webkit-touch-callout: none) {
+            
             .social-link {
-                cursor: pointer;
+                padding: 9px;
+                min-height: 44px;
             }
             
-            .modal-overlay {
-                -webkit-backdrop-filter: blur(10px);
+            .footer {
+                margin-top: 12px;
+            }
+        }
+
+        @media (max-height: 500px) {
+            .profile-pic {
+                width: 60px;
+                height: 60px;
             }
             
-            body {
-                -webkit-font-smoothing: antialiased;
+            .username {
+                font-size: 1.2rem;
+            }
+            
+            .tagline {
+                font-size: 0.75rem;
+            }
+            
+            .social-link {
+                padding: 8px;
+                font-size: 0.85rem;
+            }
+            
+            .link-title {
+                font-size: 0.8rem;
+            }
+            
+            .link-subtitle {
+                font-size: 0.65rem;
+            }
+            
+            .footer-text {
+                font-size: 0.65rem;
             }
         }
 
-        /* PREVENT TEXT SELECTION ON MOBILE */
-        .no-select {
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-        }
-
-        /* HIDE SCROLLBAR FOR MODAL */
-        .modal-content::-webkit-scrollbar {
-            width: 3px;
-        }
-
-        .modal-content::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .modal-content::-webkit-scrollbar-thumb {
-            background: var(--main-red);
-            border-radius: 3px;
-        }
-
-        /* FIX PER BOTTONI IOS CHE COPRONO CONTENUTO */
-        .ios-bottom-fix {
-            padding-bottom: constant(safe-area-inset-bottom);
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        /* TOUCH FRIENDLY */
-        button, 
-        .social-link,
-        .modal-button {
-            touch-action: manipulation;
+        /* FIX PER IOS SAFARI/CHROME */
+        @supports (-webkit-touch-callout: none) {
+            .scroll-wrapper {
+                padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px) + 20px);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- SFONDO -->
-    <div class="background-effects">
-        <div class="grid-overlay"></div>
-    </div>
-
-    <!-- WRAPPER PER GESTIONE SCROLL -->
-    <div class="page-wrapper ios-bottom-fix">
+    <!-- SCROLL WRAPPER -->
+    <div class="scroll-wrapper">
         <!-- CONTAINER PRINCIPALE -->
         <div class="container">
             <!-- PROFILO -->
@@ -713,16 +485,14 @@
 
             <!-- LINK SOCIAL -->
             <div class="links-container">
-                <!-- APP SCAMBI (PRIMO LINK) -->
-                <div class="coming-soon-container">
-                    <div class="social-link app-link" id="app-scambi-link">
-                        <i class="fas fa-exchange-alt"></i>
-                        <div class="link-content">
-                            <div class="link-title">App Scambi</div>
-                            <div class="link-subtitle">Scambia location e consigli con altri explorer</div>
-                        </div>
-                        <div class="coming-soon-badge">Coming Soon</div>
+                <!-- APP SCAMBI -->
+                <div class="social-link app-link" id="app-scambi-link">
+                    <i class="fas fa-exchange-alt"></i>
+                    <div class="link-content">
+                        <div class="link-title">App Scambi</div>
+                        <div class="link-subtitle">Scambia location e consigli con altri explorer</div>
                     </div>
+                    <div class="coming-soon-badge">Coming Soon</div>
                 </div>
 
                 <!-- YOUTUBE -->
@@ -766,13 +536,12 @@
             <div class="footer">
                 <div class="footer-logo">2L2F_URBEX</div>
                 <p class="footer-text">Exploring the forgotten • Documenting the abandoned</p>
-                <p class="footer-text">© 2024 <a href="https://youtube.com/@2l2f_urbex" class="footer-link" target="_blank">2L2F_urbex</a></p>
-                <p class="footer-text" style="font-size: 0.7rem; opacity: 0.7;">Ricorda: Non lasciare tracce, prendi solo foto</p>
+                <p class="footer-text">© 2024 <a href="https://youtube.com/@2l2f_urbex" style="color: var(--light-red);">2L2F_urbex</a></p>
             </div>
         </div>
     </div>
 
-    <!-- MODAL APP SCAMBI -->
+    <!-- MODAL -->
     <div class="modal-overlay" id="app-scambi-modal">
         <div class="modal-content">
             <button class="modal-close" id="close-modal">&times;</button>
@@ -784,39 +553,28 @@
             <h2 class="modal-title">App Scambi</h2>
             
             <p class="modal-description">
-                La <span class="highlight">prima app dedicata</span> alla community di Urban Exploration in Italia.
-                Un luogo sicuro per scambiare <span class="highlight">location, consigli e informazioni</span> su posti abbandonati.
+                App dedicata allo scambio di location e consigli tra urban explorer.
+                Disponibile su web e app nativa.
             </p>
             
             <div class="modal-features">
                 <div class="feature-item">
                     <i class="fas fa-map-marker-alt"></i>
-                    <span>Scambio location sicuro e verificato</span>
+                    <span>Scambio location sicuro</span>
                 </div>
                 <div class="feature-item">
                     <i class="fas fa-shield-alt"></i>
-                    <span>Accesso riservato alla community urbex</span>
-                </div>
-                <div class="feature-item">
-                    <i class="fas fa-mobile-alt"></i>
-                    <span>Disponibile su Web e App nativa</span>
+                    <span>Community riservata urbex</span>
                 </div>
                 <div class="feature-item">
                     <i class="fas fa-calendar-alt"></i>
-                    <span><span class="highlight">Entro Febbraio 2024:</span> versione chiusa per i primi (whitelist)</span>
+                    <span><strong>Febbraio 2024:</strong> versione chiusa (whitelist)</span>
                 </div>
             </div>
             
-            <p class="modal-description" style="font-size: 0.8rem;">
-                L'app sarà <span class="highlight">completamente gratuita</span> e disponibile inizialmente in versione web, 
-                seguita dall'app nativa per iOS e Android. La whitelist di Febbraio sarà aperta ai membri più attivi della community.
-            </p>
-            
-            <div class="modal-buttons">
-                <button class="modal-button primary" id="close-modal-2">
-                    Ho capito
-                </button>
-            </div>
+            <button class="modal-button" id="close-modal-2">
+                Ho capito
+            </button>
         </div>
     </div>
 
@@ -837,7 +595,7 @@
         closeButtons.forEach(button => {
             button.addEventListener('click', () => {
                 modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
+                document.body.style.overflow = 'hidden';
             });
         });
 
@@ -845,109 +603,37 @@
         modal.addEventListener('click', (e) => {
             if (e.target === modal) {
                 modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
+                document.body.style.overflow = 'hidden';
             }
         });
 
-        // Fix per altezza reale su iOS Chrome
-        function setRealViewportHeight() {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        // Calcola e imposta dimensioni minime
+        function adjustLayout() {
+            const container = document.querySelector('.container');
+            const wrapper = document.querySelector('.scroll-wrapper');
+            const windowHeight = window.innerHeight;
             
-            // Aggiusta il padding-bottom per iOS Chrome
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-            const isChrome = /Chrome/.test(navigator.userAgent);
-            
-            if (isIOS && isChrome) {
-                const pageWrapper = document.querySelector('.page-wrapper');
-                const container = document.querySelector('.container');
-                const windowHeight = window.innerHeight;
-                const containerHeight = container.offsetHeight;
-                
-                if (containerHeight > windowHeight - 100) {
-                    pageWrapper.style.paddingBottom = '60px';
-                } else {
-                    pageWrapper.style.paddingBottom = '40px';
-                }
+            // Controlla se il container è più alto della viewport
+            if (container.offsetHeight > windowHeight - 40) {
+                wrapper.style.paddingTop = '5px';
+                wrapper.style.paddingBottom = '20px';
+                container.style.margin = '10px 0';
+            } else {
+                // Se il container è più piccolo, centralo
+                wrapper.style.justifyContent = 'center';
             }
         }
+
+        // Esegui al caricamento e al ridimensionamento
+        window.addEventListener('load', adjustLayout);
+        window.addEventListener('resize', adjustLayout);
+        window.addEventListener('orientationchange', adjustLayout);
 
         // Animazione counter
         document.addEventListener('DOMContentLoaded', () => {
             const counter = document.querySelector('.counter');
-            let count = 0;
-            const target = 8000;
-            const increment = target / 50;
-            
-            const updateCounter = () => {
-                if (count < target) {
-                    count += increment;
-                    counter.textContent = Math.floor(count).toLocaleString() + '+';
-                    setTimeout(updateCounter, 30);
-                } else {
-                    counter.textContent = '8K+';
-                }
-            };
-            
-            // Avvia animazione quando visibile
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        updateCounter();
-                        observer.unobserve(entry.target);
-                    }
-                });
-            });
-            
-            observer.observe(counter);
-            
-            // Imposta altezza viewport reale
-            setRealViewportHeight();
+            counter.textContent = '8K+';
         });
-
-        // Gestione resize e orientation change
-        window.addEventListener('resize', setRealViewportHeight);
-        window.addEventListener('orientationchange', setRealViewportHeight);
-
-        // Fix per iOS Chrome - previene zoom su input
-        document.addEventListener('touchstart', function(e) {
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
-
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(e) {
-            const now = Date.now();
-            if (now - lastTouchEnd <= 300) {
-                e.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
-
-        // Previene bounce scroll su iOS
-        document.addEventListener('touchmove', function(e) {
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || 
-                e.target.tagName === 'SELECT') {
-                return;
-            }
-            e.preventDefault();
-        }, { passive: false });
-
-        // Disabilita menu contestuale su iOS
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        }, false);
-
-        // Aggiusta il layout al caricamento completo
-        window.addEventListener('load', function() {
-            setTimeout(setRealViewportHeight, 100);
-        });
-
-        // Fix per iOS Safari/Chrome viewport bug
-        if (/iPhone|iPad|iPod/.test(navigator.userAgent)) {
-            document.body.style.height = 'calc(var(--vh, 1vh) * 100)';
-        }
     </script>
 </body>
 </html>
